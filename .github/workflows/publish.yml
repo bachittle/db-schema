@@ -24,7 +24,7 @@ jobs:
 
       - uses: actions/setup-go@v3
         with: 
-          go-version-file: ./go.mod 
+          go-version: 1.19 
           cache: true
 
       - uses: actions/checkout@v3   
@@ -52,7 +52,7 @@ jobs:
 
       - uses: actions/setup-go@v3
         with: 
-          go-version-file: ./go.mod 
+          go-version: 1.19 
           cache: true
 
       - uses: actions/checkout@v3   
@@ -75,7 +75,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v3
         with: 
-          go-version-file: ./go.mod 
+          go-version: 1.19 
           cache: true
 
       - uses: actions/checkout@v3   

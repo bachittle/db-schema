@@ -1,25 +1,21 @@
 package main
 
 import (
-	"log"
-	"os"
-
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/alecthomas/kong"
 )
 
+var cli struct {
+	Scan    scan_cmd         `cmd:"" help:"Retrieve schema from the database file."`
+	Version kong.VersionFlag `short:"v" help:"Print version information and quit."`
+}
+
 func main() {
-
-	cc := &cli_context{
-		descr:      "schema scanner for sqlite databases",
-		executable: "db-shema",
-		commands: map[string]cmd{
-			"version": &version_cmd{},
-			"scan":    &scan_cmd{},
-		},
-	}
-
-	err := cc.execute(os.Args[1:])
-	if err != nil {
-		log.Fatal(err)
-	}
+	ctx := kong.Parse(&cli,
+		kong.Name("db-schema"),
+		kong.Description("Schema scanner for sqlite databases."),
+		kong.UsageOnError(),
+		kong.Vars{"version": app_version()},
+	)
+	err := ctx.Run()
+	ctx.FatalIfErrorf(err)
 }

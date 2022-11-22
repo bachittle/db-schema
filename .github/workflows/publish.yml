@@ -1,10 +1,14 @@
 name: Build and Publish Releases
 
-#on:
-#  release:
-#    types: [created]
-
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - '*'
+  pull_request:
+    branches:
+    - '*'  
+  release:
+    types: [created]
 
 jobs:
   build-windows:
@@ -44,20 +48,27 @@ jobs:
         run: go get ./...        
         shell: msys2 {0}
 
-      #- name: Version
-      #  run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
+      - name: Version
+        run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
 
       - name: Build 
-        run: GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=${{ env.APP_VERSION }}" .
         shell: msys2 {0}
 
       - uses: vimtor/action-zip@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: db-schema.exe
           dest: db-schema-windows-amd64.zip
 
       - name: Check
         run: ls
+        
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: db-schema-*.zip
         
 
   build-macos:
@@ -90,23 +101,31 @@ jobs:
         run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
 
       - name: Build 
-        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=${{ env.APP_VERSION }}" .
 
       - uses: vimtor/action-zip@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: db-schema
-          dest: db-schema-macos-amd64.zip
+          dest: db-schema-${{ env.APP_VERSION }}-macos-amd64.zip
 
       - name: Build 
-        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=${{ env.APP_VERSION }}" .
 
       - uses: vimtor/action-zip@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: db-schema
-          dest: db-schema-macos-arm64.zip
+          dest: db-schema-${{ env.APP_VERSION }}-macos-arm64.zip
 
       - name: Check
         run: ls
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: db-schema-*.zip
 
   build-linux:
     name: Linux Binaries
@@ -120,7 +139,7 @@ jobs:
           cache: true
 
       - run: |
-          sudo apt-get update && sudo apt-get install gcc-aarch64-linux-gnu gcc-mingw-w64
+          sudo apt-get update && sudo apt-get install gcc-aarch64-linux-gnu
 
       - name: Add $GOPATH/bin to $PATH
         run: |
@@ -137,21 +156,28 @@ jobs:
         run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
 
       - name: Build linux-amd64
-        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=${{ env.APP_VERSION }}" .
 
       - uses: vimtor/action-zip@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: db-schema
-          dest: db-schema-linux-amd64.zip
+          dest: db-schema-${{ env.APP_VERSION }}-linux-amd64.zip
 
       - name: Build linux-arm64
-        run: GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=${{ env.APP_VERSION }}" .
 
       - uses: vimtor/action-zip@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: db-schema
-          dest: db-schema-linux-arm64.zip
+          dest: db-schema-${{ env.APP_VERSION }}-linux-arm64.zip
 
       - name: Check
         run: ls
 
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: db-schema-*.zip

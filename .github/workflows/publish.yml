@@ -97,6 +97,14 @@ jobs:
           files: db-schema
           dest: db-schema-macos-amd64.zip
 
+      - name: Build 
+        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: db-schema
+          dest: db-schema-macos-arm64.zip
+
       - name: Check
         run: ls
 
@@ -112,7 +120,7 @@ jobs:
           cache: true
 
       - run: |
-          sudo apt-get update && sudo apt-get install gcc-aarch64-linux-gnu gcc-mingw-w64-x86-64
+          sudo apt-get update && sudo apt-get install gcc-aarch64-linux-gnu gcc-mingw-w64
 
       - name: Add $GOPATH/bin to $PATH
         run: |
@@ -143,14 +151,6 @@ jobs:
         with:
           files: db-schema
           dest: db-schema-linux-arm64.zip
-
-      - name: Build windows-x86
-        run: GOOS=windows GOARCH=arm64 CC=x86_64-w64-mingw32-gcc CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
-
-      - uses: vimtor/action-zip@v1
-        with:
-          files: db-schema
-          dest: db-schema-windows-x64.zip
 
       - name: Check
         run: ls

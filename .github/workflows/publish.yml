@@ -46,7 +46,7 @@ jobs:
 
   build-macos:
     name: MacOS Binaries
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - run: brew update
 
@@ -71,7 +71,7 @@ jobs:
 
   build-linux:
     name: Linux Binaries
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v3
         with: 

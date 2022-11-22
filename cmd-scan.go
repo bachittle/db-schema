@@ -97,7 +97,7 @@ func (v *scan_cmd) Run(ctx *kong.Context) error {
 			}
 		}
 	}
-	if v.NormNames != "no" {
+	if v.NormNames != "skip" {
 		var uppercase bool
 		switch v.NormNames {
 		case "upper":

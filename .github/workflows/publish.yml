@@ -22,9 +22,11 @@ jobs:
           msystem: MINGW64
           path-type: inherit
 
+      - uses: actions/checkout@v3   
+
       - uses: actions/setup-go@v3
         with: 
-          go-version: 1.19 
+          go-version-file: ./go.mod 
           cache: true
 
       - name: Add $GOPATH/bin to $PATH
@@ -32,10 +34,11 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
         shell: msys2 {0}
 
-      - run: go env
+      - run: go version
         shell: msys2 {0}
 
-      - uses: actions/checkout@v3   
+      - run: go env
+        shell: msys2 {0}
 
       - name: Install dependencies
         run: go get ./...        
@@ -58,18 +61,20 @@ jobs:
     steps:
       - run: brew update
 
+      - uses: actions/checkout@v3   
+
       - uses: actions/setup-go@v3
         with: 
-          go-version: 1.19 
+          go-version-file: ./go.mod 
           cache: true
 
       - name: Add $GOPATH/bin to $PATH
         run: |
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-      - run: go env
+      - run: go version
 
-      - uses: actions/checkout@v3   
+      - run: go env
 
       - name: Install dependencies
         run: go get ./...        
@@ -87,18 +92,20 @@ jobs:
     name: Linux Binaries
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3   
+
       - uses: actions/setup-go@v3
         with: 
-          go-version: 1.19 
+          go-version-file: ./go.mod 
           cache: true
 
       - name: Add $GOPATH/bin to $PATH
         run: |
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-      - run: go env
+      - run: go version
 
-      - uses: actions/checkout@v3   
+      - run: go env
 
       - name: Install dependencies
         run: go get ./...        

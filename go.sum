@@ -1,11 +1,15 @@
-github.com/adnsv/go-db3 v0.3.1 h1:t+voOzUaa99zCHV5rEVVGhvWxcLFYa1W/IyglwyKz6M=
-github.com/adnsv/go-db3 v0.3.1/go.mod h1:MhPLmZ+8L3Njl3So0ACb2cHoCyNz2xQGW5Rx8S/9VJ0=
 github.com/adnsv/go-db3 v0.5.0 h1:X6ErjUprMccXqGAhBsbuKt1avGlXfuevYdL4IEkmWBc=
 github.com/adnsv/go-db3 v0.5.0/go.mod h1:MhPLmZ+8L3Njl3So0ACb2cHoCyNz2xQGW5Rx8S/9VJ0=
+github.com/alecthomas/assert/v2 v2.1.0 h1:tbredtNcQnoSd3QBhQWI7QZ3XHOVkw1Moklp2ojoH/0=
+github.com/alecthomas/kong v0.7.1 h1:azoTh0IOfwlAX3qN9sHWTxACE2oV8Bg2gAwBsMwDQY4=
+github.com/alecthomas/kong v0.7.1/go.mod h1:n1iCIO2xS46oE8ZfYCNDqdR0b0wZNrXAIAqro/2132U=
+github.com/alecthomas/repr v0.1.0 h1:ENn2e1+J3k09gyj2shc0dHr/yjaWSHRlrJ4DPMevDqE=
+github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=
 github.com/mattn/go-sqlite3 v1.14.16 h1:yOQRA0RpS5PFz/oikGwBEqvAWhWg5ufRz4ETLjwpU1Y=
 github.com/mattn/go-sqlite3 v1.14.16/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 golang.org/x/exp v0.0.0-20221111094246-ab4555d3164f h1:dx+ByaHZgQORWfy/TumeLerCm48o5pDf+skF0SWtLdY=
 golang.org/x/exp v0.0.0-20221111094246-ab4555d3164f/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=

@@ -27,6 +27,14 @@ jobs:
           go-version: 1.19 
           cache: true
 
+      - name: Add $GOPATH/bin to $PATH
+        run: |
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+        shell: msys2 {0}
+
+      - run: go env
+        shell: msys2 {0}
+
       - uses: actions/checkout@v3   
 
       - name: Install dependencies
@@ -55,6 +63,12 @@ jobs:
           go-version: 1.19 
           cache: true
 
+      - name: Add $GOPATH/bin to $PATH
+        run: |
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - run: go env
+
       - uses: actions/checkout@v3   
 
       - name: Install dependencies
@@ -77,6 +91,12 @@ jobs:
         with: 
           go-version: 1.19 
           cache: true
+
+      - name: Add $GOPATH/bin to $PATH
+        run: |
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - run: go env
 
       - uses: actions/checkout@v3   
 

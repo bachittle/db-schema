@@ -48,8 +48,13 @@ jobs:
       #  run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
 
       - name: Build 
-        run: go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
         shell: msys2 {0}
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: db-schema.exe
+          dest: db-schema-windows-amd64.zip
 
       - name: Check
         run: ls
@@ -60,6 +65,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - run: brew update
+
+      - run: brew install sqlite3
 
       - uses: actions/checkout@v3   
 
@@ -83,7 +90,12 @@ jobs:
         run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
 
       - name: Build 
-        run: go build -v -ldflags "-X main.app_ver=v0.1.0" .
+        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: db-schema
+          dest: db-schema-macos-amd64.zip
 
       - name: Check
         run: ls
@@ -99,6 +111,9 @@ jobs:
           go-version-file: ./go.mod 
           cache: true
 
+      - run: |
+          sudo apt-get update && sudo apt-get install gcc-aarch64-linux-gnu
+
       - name: Add $GOPATH/bin to $PATH
         run: |
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
@@ -113,8 +128,21 @@ jobs:
       - name: Version
         run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
 
-      - name: Build 
-        run: go build -v -ldflags "-X main.app_ver=v0.1.0" .
+      - name: Build AMD64
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: db-schema
+          dest: db-schema-linux-amd64.zip
+
+      - name: Build ARM64
+        run: GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc CGO_ENABLED=1 go build -v -ldflags "-X main.app_ver=v0.1.0" .
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: db-schema
+          dest: db-schema-linux-arm64.zip
 
       - name: Check
         run: ls

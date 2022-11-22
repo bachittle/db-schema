@@ -1,0 +1,87 @@
+name: Build and Publish Releases
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-windows:
+    name: Windows Binaries
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-sqlite3
+          msystem: MINGW64
+          path-type: inherit
+
+      - name: Version
+        run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
+
+      - uses: actions/checkout@v3   
+
+      - uses: actions/setup-go@v3
+        with: 
+          go-version-file: ./go.mod 
+          cache: true
+
+      - name: Build
+        uses: wangyoucao577/go-release-action@v1.33
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: windows
+          goarch: amd64
+          goversion: 1.19
+          build_flags: -v
+          ldflags: -X "main.app_ver=${{ env.APP_VERSION }}"
+          compress_assets: zip
+
+  build-macos:
+    name: MacOS Binaries
+    runs-on: windows-latest
+    steps:
+      - run: brew update
+
+      - name: Version
+        run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
+
+      - uses: actions/checkout@v3   
+
+      - name: Build
+        uses: wangyoucao577/go-release-action@v1.33
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goversion: 1.19
+          goos: darwin
+          goarch: amd64
+          build_flags: -v
+          ldflags: -X "main.app_ver=${{ env.APP_VERSION }}"
+          compress_assets: zip
+
+  build-linux:
+    name: Linux Binaries
+    runs-on: windows-latest
+    steps:
+      - run: brew update
+
+      - name: Version
+        run: echo APP_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
+
+      - uses: actions/checkout@v3   
+
+      - name: Build
+        uses: wangyoucao577/go-release-action@v1.33
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goversion: 1.19
+          goos: linux
+          goarch: amd64
+          build_flags: -v
+          ldflags: -X "main.app_ver=${{ env.APP_VERSION }}"
+          compress_assets: zip
+

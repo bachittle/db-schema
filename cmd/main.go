@@ -2,10 +2,11 @@ package main
 
 import (
 	"github.com/alecthomas/kong"
+	dbs "github.com/bachittle/db-schema"
 )
 
 var cli struct {
-	Scan    ScanCmd          `cmd:"" help:"Retrieve schema from the database file."`
+	Scan    dbs.ScanCmd      `cmd:"" help:"Retrieve schema from the database file."`
 	Version kong.VersionFlag `short:"v" help:"Print version information and quit."`
 }
 

@@ -1,4 +1,4 @@
-module github.com/bachittle/db-schema
+module github.com/adnsv/db-schema
 
 go 1.19
 

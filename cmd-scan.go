@@ -19,7 +19,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type scan_cmd struct {
+type ScanCmd struct {
 	Output    string   `short:"o" type:"path" help:"Output filename."`
 	Fmt       string   `short:"f" enum:"yaml,json,sql" default:"yaml" placeholder:"yaml|json|sql" help:"Output format."`
 	NormTypes bool     `optional:"" help:"Normalize column types, remove default nulls for nullables."`
@@ -29,7 +29,7 @@ type scan_cmd struct {
 	InputFile string `arg:"" required:"" type:"existingfile" help:"Path to SQLite database file."`
 }
 
-func (v *scan_cmd) Run(ctx *kong.Context) error {
+func (v *ScanCmd) Run(ctx *kong.Context) error {
 	// validate output path
 	if v.Output != "" {
 		stat, err := os.Stat(v.Output)

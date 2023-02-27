@@ -5,7 +5,7 @@ import (
 )
 
 var cli struct {
-	Scan    scan_cmd         `cmd:"" help:"Retrieve schema from the database file."`
+	Scan    ScanCmd          `cmd:"" help:"Retrieve schema from the database file."`
 	Version kong.VersionFlag `short:"v" help:"Print version information and quit."`
 }
 

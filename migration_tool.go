@@ -9,6 +9,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/adnsv/go-db3/schema"
 )
 
 type MigrationToolCmd struct {
@@ -96,11 +98,16 @@ func (v *MigrationCreateCmd) Run() error {
 		return err
 	}
 
-	// sch, err := schema.Scan(hostDB)
-	// if err != nil {
-	// 	return err
-	// }
-	// fmt.Println("schema loaded")
+	sch, err := schema.Scan(hostDB)
+	// _, err = schema.Scan(hostDB)
+	if err != nil {
+		return err
+	}
+	fmt.Println("schema loaded:")
+
+	for _, table := range sch.Tables {
+		fmt.Println(table.Name)
+	}
 
 	return nil
 }

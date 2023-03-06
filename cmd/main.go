@@ -6,9 +6,10 @@ import (
 )
 
 var cli struct {
-	Scan    dbs.ScanCmd      `cmd:"" help:"Retrieve schema from the database file."`
-	Compare dbs.CompareCmd   `cmd:"" help:"Compare database schemas, generate a migration file."`
-	Version kong.VersionFlag `short:"v" help:"Print version information and quit."`
+	Scan     dbs.ScanCmd          `cmd:"" help:"Retrieve schema from the database file."`
+	Compare  dbs.CompareCmd       `cmd:"" help:"Compare database schemas, generate a migration file."`
+	Version  kong.VersionFlag     `short:"v" help:"Print version information and quit."`
+	Migrator dbs.MigrationToolCmd `cmd:"" help:"Migration tool for sqlite databases."`
 }
 
 func main() {

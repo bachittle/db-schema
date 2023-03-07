@@ -1,5 +1,4 @@
-// a command-line utility to compare two database schemas and generate migration instructions
-package DbSchema
+package main
 
 import (
 	"fmt"

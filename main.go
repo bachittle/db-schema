@@ -1,13 +1,12 @@
 package main
 
 import (
-	dbs "github.com/adnsv/db-schema"
 	"github.com/alecthomas/kong"
 )
 
 var cli struct {
-	Scan    dbs.ScanCmd      `cmd:"" help:"Retrieve schema from the database file."`
-	Compare dbs.CompareCmd   `cmd:"" help:"Compare database schemas, generate a migration file."`
+	Scan    ScanCmd          `cmd:"" help:"Retrieve schema from the database file."`
+	Compare CompareCmd       `cmd:"" help:"Compare database schemas, generate a migration file."`
 	Version kong.VersionFlag `short:"v" help:"Print version information and quit."`
 }
 

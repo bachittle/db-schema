@@ -1,4 +1,4 @@
-package DbSchema
+package main
 
 import (
 	"bytes"

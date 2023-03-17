@@ -7,6 +7,7 @@ import (
 var cli struct {
 	Scan    ScanCmd          `cmd:"" help:"Retrieve schema from the database file."`
 	Compare CompareCmd       `cmd:"" help:"Compare database schemas, generate a migration file."`
+	Migrate MigrateCmd       `cmd:"" help:"Migrate the database schema."`
 	Version kong.VersionFlag `short:"v" help:"Print version information and quit."`
 }
 

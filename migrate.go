@@ -21,13 +21,13 @@ func (v *MigrateCmd) Run() error {
 
 	db1, err := sql.Open("sqlite3", v.Src)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer db1.Close()
 
 	db2, err := sql.Open("sqlite3", v.Dst)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer db2.Close()
 
@@ -36,12 +36,12 @@ func (v *MigrateCmd) Run() error {
 
 	sch1, err := schema.Scan(db1)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	sch2, err := schema.Scan(db2)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	migration := compareSchemas(sch1.Tables, sch2.Tables)
@@ -64,7 +64,7 @@ func (v *MigrateCmd) Run() error {
 		if confirm == "y" {
 			_, err := db1.Exec(fmt.Sprintf("DROP TABLE %s;", table.Name))
 			if err != nil {
-				panic(err)
+				return err
 			}
 		}
 	}
@@ -79,7 +79,7 @@ func (v *MigrateCmd) Run() error {
 		var count int
 		err := db1.QueryRow("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?", table.Name).Scan(&count)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		if count == 0 {
@@ -99,7 +99,7 @@ func (v *MigrateCmd) Run() error {
 			log.Printf("sql: CREATE TABLE %s (%s %s);\n", table.Name, idCol.Name, idCol.Type)
 			_, err := db1.Exec(fmt.Sprintf("CREATE TABLE %s (%s %s);", table.Name, idCol.Name, idCol.Type))
 			if err != nil {
-				panic(err)
+				return err
 			}
 		}
 
@@ -112,7 +112,7 @@ func (v *MigrateCmd) Run() error {
 			log.Printf("sql: ALTER TABLE %s ADD COLUMN %s %s;\n", table.Name, column.Name, column.Type)
 			_, err := db1.Exec(fmt.Sprintf("ALTER TABLE %s ADD COLUMN %s %s;", table.Name, column.Name, column.Type))
 			if err != nil {
-				panic(err)
+				return err
 			}
 		}
 

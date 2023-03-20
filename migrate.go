@@ -43,6 +43,8 @@ func (v *MigrateCmd) Run() error {
 			return err
 		}
 
+		sch2 = &schema.Database{}
+
 		// first try with tables
 		err = yaml.Unmarshal(data, &sch2.Tables)
 		if err != nil {

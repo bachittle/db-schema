@@ -87,10 +87,17 @@ func (v *MigrateCmd) Run() error {
 
 	// remove tables first. this can cause data loss
 	for _, table := range migration.Rm {
-		// ask for confirmation
-		var confirm string
-		fmt.Printf("Are you sure you want to remove table %s? (y/n): ", table.Name)
-		fmt.Scanln(&confirm)
+		// if table has no data, we can remove it without confirmation
+		var count int
+		err := db1.QueryRow(fmt.Sprintf("SELECT COUNT(*) FROM %s;", table.Name)).Scan(&count)
+		if err != nil {
+			return err
+		}
+		confirm := "y"
+		if count != 0 {
+			fmt.Printf("Are you sure you want to remove table %s? It has %d rows. (y/n): ", table.Name, count)
+			fmt.Scanln(&confirm)
+		}
 
 		if confirm == "y" {
 			_, err := db1.Exec(fmt.Sprintf("DROP TABLE %s;", table.Name))

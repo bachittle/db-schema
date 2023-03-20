@@ -7,8 +7,11 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/adnsv/go-db3/schema"
+	"gopkg.in/yaml.v3"
 )
 
 type MigrateCmd struct {
@@ -19,30 +22,58 @@ type MigrateCmd struct {
 func (v *MigrateCmd) Run() error {
 	fmt.Println("# migrate", v.Src, v.Dst)
 
+	// source type is always sqlite3
 	db1, err := sql.Open("sqlite3", v.Src)
 	if err != nil {
 		return err
 	}
 	defer db1.Close()
 
-	db2, err := sql.Open("sqlite3", v.Dst)
-	if err != nil {
-		return err
-	}
-	defer db2.Close()
-
-	// convert db1 => db2
-	// writes on db1, db2 is the reference
-
 	sch1, err := schema.Scan(db1)
 	if err != nil {
 		return err
 	}
 
-	sch2, err := schema.Scan(db2)
-	if err != nil {
-		return err
+	var sch2 *schema.Database
+
+	// check file extension
+	if filepath.Ext(v.Dst) == ".yaml" || filepath.Ext(v.Dst) == ".yml" {
+		data, err := os.ReadFile(v.Dst)
+		if err != nil {
+			return err
+		}
+
+		// first try with tables
+		err = yaml.Unmarshal(data, &sch2.Tables)
+		if err != nil {
+			// then try with entire db
+			fmt.Println("failed to unmarshal tables, trying with entire db")
+			err = yaml.Unmarshal(data, &sch2)
+			if err != nil {
+				fmt.Println("failed to unmarshal database, failing")
+				return err
+			}
+		}
+
+	} else if filepath.Ext(v.Dst) == ".sqlite3" || filepath.Ext(v.Dst) == ".db3" ||
+		filepath.Ext(v.Dst) == ".sqlite" || filepath.Ext(v.Dst) == ".db" {
+		db2, err := sql.Open("sqlite3", v.Dst)
+		if err != nil {
+			return err
+		}
+		defer db2.Close()
+
+		sch2, err = schema.Scan(db2)
+		if err != nil {
+			return err
+		}
+
+	} else {
+		return fmt.Errorf("unsupported file extension: %s", filepath.Ext(v.Dst))
 	}
+
+	// convert db1 => db2
+	// writes on db1, db2 is the reference
 
 	migration := compareSchemas(sch1.Tables, sch2.Tables)
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/adnsv/go-db3/schema"
+	"github.com/bachittle/go-db3/schema"
 	"gopkg.in/yaml.v3"
 )
 

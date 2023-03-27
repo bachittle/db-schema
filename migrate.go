@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/adnsv/go-db3/schema"
+	"github.com/bachittle/go-db3/schema"
 )
 
 type MigrateCmd struct {

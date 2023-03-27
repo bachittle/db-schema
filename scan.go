@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/adnsv/go-db3/schema"
 	"github.com/alecthomas/kong"
+	"github.com/bachittle/go-db3/schema"
 	"gopkg.in/yaml.v3"
 
 	_ "github.com/mattn/go-sqlite3"

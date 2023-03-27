@@ -1,4 +1,4 @@
-module github.com/adnsv/db-schema
+module github.com/bachittle/db-schema
 
 go 1.19
 
@@ -10,3 +10,5 @@ require (
 )
 
 require golang.org/x/exp v0.0.0-20221111094246-ab4555d3164f // indirect
+
+replace github.com/adnsv/go-db3 => github.com/bachittle/go-db3 v0.5.0-rc.1
